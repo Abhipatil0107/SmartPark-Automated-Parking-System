@@ -41,7 +41,13 @@ public class ParkingSystem {
     }
 
     public static void main(String[] args) throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+       int port = Integer.parseInt(
+    System.getenv().getOrDefault("PORT", "8080")
+);
+
+HttpServer server = HttpServer.create(
+    new InetSocketAddress("0.0.0.0", port), 0
+);
         server.createContext("/", ParkingSystem::home);
         server.createContext("/api/status", ParkingSystem::status);
         server.createContext("/api/park", ParkingSystem::park);
@@ -49,7 +55,6 @@ public class ParkingSystem {
         server.createContext("/api/receipt", ParkingSystem::receipt);
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();
-        int port = server.getAddress().getPort();
         System.out.println("========================================");
         System.out.println("          SMARTPARK IS ONLINE");
         System.out.println("Open in browser: http://127.0.0.1:" + port);
